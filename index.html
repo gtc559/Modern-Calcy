@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="donate1.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Dosis:wght@200&family=Orbitron&family=Oswald:wght@300&family=Rokkitt:wght@100&family=Rubik+Dirt&family=Rubik+Maze&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="calculator">
+      <div>
+        <a id="btn2" onclick="toggle()" title="light/dark mode">
+          <i class="fa fa-moon-o"></i>
+        </a>
+      </div>
+      <div>
+        <a id="btn3" title="Additional options">
+          <i class="fa fa-circle"></i>
+        </a>
+      </div>
+
+      <div class="scr">
+        <input type="text" id="screen11" class="screen" />
+      </div>
+      <div>
+        <input type="text" class="screen1" />
+      </div>
+      <div class="btns">
+        <div class="row">
+          <button type="button" class="btn" data-num="9">9</button>
+          <button type="button" class="btn" data-num="8">8</button>
+          <button type="button" class="btn" data-num="7">7</button>
+          <button type="button" class="btn" data-num="-">-</button>
+        </div>
+        <div class="row">
+          <button type="button" class="btn" data-num="6">6</button>
+          <button type="button" class="btn" data-num="5">5</button>
+          <button type="button" class="btn" data-num="4">4</button>
+          <button type="button" class="equal">=</button>
+        </div>
+        <div class="row">
+          <button type="button" class="btn" data-num="3">3</button>
+          <button type="button" class="btn" data-num="2">2</button>
+          <button type="button" class="btn" data-num="1">1</button>
+          <button type="button" class="btn" data-num=".">.</button>
+        </div>
+        <div class="row">
+          <button type="button" class="btn" data-num="0">0</button>
+          <button type="button" class="btn" data-num="+">+</button>
+          <button type="button" class="btn" data-num="*">x</button>
+          <button type="button" class="btn" data-num="/">/</button>
+        </div>
+        <button type="button" id="clear">AC</button>
+      </div>
+      <div class="sidebar">
+        <button type="button" class="btn" data-num="%" title="Modulus">
+          %
+        </button>
+        <button type="button" class="btn" data-num="//" title="Floor Division">
+          //
+        </button>
+        <button type="button" class="btn" data-num="**" title="Power">
+          **
+        </button>
+        <button type="button" class="btn" data-num="" id="del" title="Delete">
+          Del
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let screen = document.querySelector(".screen");
+      let scr = document.querySelector(".scr");
+      let screen1 = document.querySelector(".screen1");
+      let sidepanel1 = document.querySelector("#btn3");
+      let buttons = document.querySelectorAll(".btn");
+      let equal = document.querySelector(".equal");
+      let clear = document.querySelector("#clear");
+      let del = document.querySelector("#del");
+      let mode = document.querySelector("#btn2");
+      let inp = document.querySelector(".screen");
+      let inp1 = document.querySelector(".screen1");
+      let sidepanel2 = document.querySelector(".sidebar");
+      let calc = document.querySelector(".calculator");
+      let beep = new Audio();
+      beep.src = "./beep.mp3";
+      beep.playbackRate = 1.5;
+
+      //taking user input
+      buttons.forEach(function (button) {
+        button.addEventListener("click", function (e) {
+          let value = e.target.dataset.num;
+          screen.value += value;
+          beep.currentTime = 0;
+          beep.play(); // Play the audio
+        });
+      });
+      buttons.forEach(function (button) {
+        button.style.backgroundColor = "#2a2828c5";
+        button.style.boxShadow = "6px 2px 14px #f8f8f8d1 inset";
+        button.addEventListener("click", function (e) {
+          button.style.boxShadow = "1px 1px 3px #f8f8f8d1";
+          setTimeout(anim, 150);
+        });
+        function anim() {
+          button.style.boxShadow = "6px 2px 14px #f8f8f8d1 inset";
+        }
+      });
+
+      //sidebar visibility toggle
+      sidepanel1.addEventListener("click", function (e) {
+        sidepanel2.style.visibility = "visible";
+      });
+
+      //equal button
+      equal.addEventListener("click", function (e) {
+        setTimeout(anim2, 150);
+        if (screen.value === "") {
+          screen.value = "Please enter something...";
+          equal.style.boxShadow = "1px 1px 3px #f8f8f8d1  ";
+          beep.play(); // Play the audio
+        } else {
+          let result = eval(screen.value);
+          screen1.value = result;
+          equal.style.boxShadow = "1px 1px 3px #f8f8f8d1  ";
+          beep.play(); // Play the audio
+        }
+      });
+
+      //clear button
+      clear.addEventListener("click", function () {
+        screen.value = "";
+        clear.style.boxShadow = "1px 1px 3px #f8f8f8d1";
+        setTimeout(anim1, 150);
+        beep.play(); // Play the audio
+      });
+
+      //backspace button
+      del.addEventListener("click", () => {
+        document.querySelector("#screen11").value = document
+          .querySelector("#screen11")
+          .value.slice(0, -1);
+      });
+
+      //toggle method for white/dark mode
+      function toggle() {
+        if (mode.innerHTML === '<i class="fa fa-sun-o"></i>') {
+          mode.innerHTML = '<i class="fa fa-moon-o"></i>';
+          mode.style.transform = "rotate(-25deg)";
+          mode.style.transition = "all 1.5s";
+          calc.style.transition = "all 1.3s";
+          sidepanel2.style.transition = "all 1.5s";
+          sidepanel2.style.backgroundColor = "black";
+          calc.style.backgroundColor = "black";
+          equal.style.backgroundColor = "goldenrod";
+          equal.style.boxShadow = "6px 2px 14px #f8f8f8d1 inset";
+          clear.style.backgroundColor = "red";
+          clear.style.boxShadow = "6px 2px 14px #f8f8f8d1 inset";
+          inp.style.boxShadow = "37px 57px 181px #fdffde inset";
+          inp.style.color = "black";
+          inp1.style.boxShadow = "37px 57px 181px #fdffde inset";
+          inp1.style.color = "black";
+          buttons.forEach(function (button) {
+            button.style.backgroundColor = "#2a2828c5";
+            button.style.color = "white";
+            button.style.boxShadow = "6px 2px 14px #f8f8f8d1 inset";
+            button.addEventListener("click", function (e) {
+              button.style.boxShadow = "1px 1px 3px #f8f8f8d1";
+              setTimeout(anim, 150);
+            });
+            function anim() {
+              button.style.boxShadow = "6px 2px 14px #f8f8f8d1 inset";
+            }
+          });
+          equal.addEventListener("click", function (e) {
+            if (screen.value === "") {
+              screen.value = "Please enter something...";
+              equal.style.boxShadow = "1px 1px 3px #f8f8f8d1  ";
+            } else {
+              let result = eval(screen.value);
+              screen1.value = result;
+              equal.style.boxShadow = "1px 1px 3px #f8f8f8d1  ";
+            }
+            setTimeout(anim2, 150);
+          });
+
+          clear.addEventListener("click", function () {
+            screen.value = "";
+            clear.style.boxShadow = "1px 1px 3px #f8f8f8d1";
+            setTimeout(anim1, 150);
+          });
+        } else {
+          mode.innerHTML = '<i class="fa fa-sun-o"></i>';
+          mode.style.transform = "rotate(50deg)";
+          mode.style.transition = "all 1.5s";
+          calc.style.transition = "all 1.5s";
+          sidepanel2.style.transition = "all 1.5s";
+          sidepanel2.style.backgroundColor = "white";
+          inp.style.boxShadow =
+            "37px 57px 181px rgba(255, 255, 0, 0.603) inset";
+          inp.style.color = "white";
+          inp1.style.boxShadow = "37px 57px 181px  #c2c249 inset";
+          inp1.style.color = "white";
+          calc.style.backgroundColor = "white";
+          equal.style.backgroundColor = "rgba(255, 68, 0, 0.677)";
+          equal.style.boxShadow = "6px 2px 13px #2a2828c5";
+          clear.style.backgroundColor = "green";
+          clear.style.boxShadow = "6px 2px 13px #2a2828c5";
+          buttons.forEach(function (button) {
+            button.style.backgroundColor = "#f8f8f8d1";
+            button.style.boxShadow = "6px 2px 13px #2a2828c5 ";
+            button.style.color = "blue";
+
+            button.addEventListener("click", function (e) {
+              button.style.boxShadow = "6px 2px 13px #2a2828c5 inset";
+              setTimeout(anime, 150);
+            });
+            function anime() {
+              button.style.boxShadow = "6px 2px 13px #2a2828c5";
+            }
+          });
+          equal.addEventListener("click", function (e) {
+            setTimeout(anim22, 150);
+            if (screen.value === "") {
+              screen.value = "Please enter something...";
+              equal.style.boxShadow = "6px 2px 13px #2a2828c5 inset";
+            } else {
+              let result = eval(screen.value);
+              screen1.value = result;
+              equal.style.boxShadow = "6px 2px 13px #2a2828c5 inset";
+            }
+          });
+          clear.addEventListener("click", function () {
+            screen.value = "";
+            clear.style.boxShadow = "6px 2px 13px #2a2828c5 inset";
+            setTimeout(anim11, 150);
+          });
+        }
+      }
+      function anim1() {
+        clear.style.boxShadow = "6px 2px 14px #f8f8f8d1 inset";
+      }
+
+      function anim11() {
+        clear.style.boxShadow = "6px 2px 14px #2a2828c5";
+      }
+
+      function anim2() {
+        equal.style.boxShadow = "6px 2px 14px #f8f8f8d1 inset";
+      }
+      function anim22() {
+        equal.style.boxShadow = "6px 2px 14px #2a2828c5";
+      }
+    </script>
+  </body>
+</html>
